@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>agriventure</title>
+  </head>
+  <body>
+    <p>Lagerbestand</p>
+    <div>
+        <table style="width:100%">
+            <tr>
+                <th>NR</th>
+                <th>Datum</th>
+            </tr>
+                 {% for item in objs %}
+            <tr>
+                 <td>{{ item.transaction_id }}</td>
+                 <td>{{ item.transaction_date }}</td>
+            </tr>
+               {% endfor %}
+        </table>
+    </div>
+  </body>
+</html>
