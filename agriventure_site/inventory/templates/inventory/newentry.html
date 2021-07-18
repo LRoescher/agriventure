@@ -5,11 +5,33 @@
     <title>agriventure</title>
   </head>
   <body>
-    <p>Warensystem für Landwirte</p>
-    <div>
-        <form method="POST" action="/inventory/newentry/">
-            <input type="submit"/>
+    <p>Neue Lieferung</p>
+
+        <form method="POST">
+            <label class="entry_type_switch">
+            Zugang
+            <input class="slider" type="checkbox" id="entry_type" name="entry_type" checked="{{ temp_item.entry_type }}">
+            </label>
+        <table>
+            <tr>
+                <td>Datum/Zeit</td>
+                <td><label><input type="datetime-local" id="date_time" name="date_time" value="{{ temp_item.date_time}}" ></label></td>
+            </tr>
+
+            <tr>
+                <td>Für</td>
+                <td><label><input type="text" id="delivered_by" name="delivered_by" value="{{ temp_item.deilvered_by }}"></label></td>
+            </tr>
+
+            <tr>
+                <td>Komponenten</td>
+                <td><label><input type="submit" id=new_component" name="new_component" value="Neue Komponente"></label></td>
+            </tr>
+
+        </table>
+            <input type="submit" id="new_transactions" name="new_transactions" value="Anlegen"><br><br>
         </form>
-    </div>
+
+
   </body>
 </html>

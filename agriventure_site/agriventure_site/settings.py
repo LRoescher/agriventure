@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'inventory.apps.InventoryConfig',
+    'django_tables2',
+    'django_filters',
+    'bootstrap3',
     
     'django.contrib.admin',
     'django.contrib.auth',

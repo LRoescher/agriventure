@@ -1,24 +1,33 @@
-<!DOCTYPE html>
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+<!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>agriventure</title>
-  </head>
-  <body>
-    <p>Lagerbestand</p>
-    <div>
-        <table style="width:100%">
-            <tr>
-                <th>NR</th>
-                <th>Datum</th>
-            </tr>
-                 {% for item in objs %}
-            <tr>
-                 <td>{{ item.transaction_id }}</td>
-                 <td>{{ item.transaction_date }}</td>
-            </tr>
-               {% endfor %}
-        </table>
+    <head>
+        <title>Transaktionen</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    </head>
+    <body>
+        {% if filter %}
+    <form action="" method="get" class="form form-inline">
+
+<div class="form-group has-success">
+    <label class="sr-only" for="id_delivered_by">
+        Delivered by
+    </label>
+    <input type="text" name="delivered_by"  class="form-control" placeholder="Für" title="" id="id_delivered_by">
+    <div class="form-group has-success">
+        <label class="sr-only" for="id_date">
+            Date</label>
+        <input type="datetime-local" name="date" value="" class="form-control" placeholder="Datum" title="" id="id_date">
     </div>
-  </body>
+</div>
+        <button class="btn btn-default">filtern</button>
+</form>
+{% endif %}
+{% render_table table 'django_tables2/bootstrap.html' %}
+</body>
 </html>
+
+
+
+
