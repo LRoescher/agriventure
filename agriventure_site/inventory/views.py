@@ -47,6 +47,7 @@ def index(request):
 @csrf_exempt
 def newentry(request):
     temp_item = {'delivered_by':['Röscher']}
+    print(request.POST)
     if "new_component" in request.POST.keys():
         print(request.POST)
         temp_item = {'date_time': request.POST.get('datetime'),
