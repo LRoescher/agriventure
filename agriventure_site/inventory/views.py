@@ -9,9 +9,10 @@ from django.views.generic import ListView
 from django_tables2 import SingleTableView
 from .tables import TransactionTable
 from django_filters.views import FilterView
+from django.views.generic import CreateView
 from django_tables2.views import SingleTableMixin
 
-from .models import Transaction
+from .models import Transaction, TransactionComponent, Item, User, Customer, Warehouse
 
 import django_filters
 
@@ -28,9 +29,23 @@ class InventoryListView(SingleTableMixin, FilterView):
 
     filterset_class = TransactioFilter
 
+class TransactionCreateView(CreateView):
+    model = Transaction
+
+    fields = (
+    'tan',
+    'date' ,
+    'costs' ,
+    'delivered_by',
+    'done_by' ,
+    'components' ,
+    'transaction_type' ,
+              )
+
 
 @csrf_exempt
 def index(request):
+
     try:
         template = loader.get_template('inventory/index.html')
     except:
@@ -46,8 +61,23 @@ def index(request):
 
 @csrf_exempt
 def newentry(request):
-    temp_item = {'delivered_by':['Röscher']}
+    #get locals for form
+    delivered_by_preset = Customer.objects.all()
+    done_by_preset = User.objects.all()
+    item_preset = Item.objects.all()
+    warehouse_preset = Warehouse.objects.all()
+
+    presets = {
+        'delivered_by_preset': delivered_by_preset,
+        'done_by_preset':done_by_preset,
+        'item_preset':item_preset,
+        'warehouse_preset':warehouse_preset
+    }
+
     print(request.POST)
+
+    if "new_component" in request.POST.keys():
+        item = Item.objects.create(crop_name = "ddfwf")
     if "new_component" in request.POST.keys():
         print(request.POST)
         temp_item = {'date_time': request.POST.get('datetime'),
@@ -55,7 +85,7 @@ def newentry(request):
                      'entry_type': 'true' if request.POST.get('entry_type') == 'on' else 'false'
                      }
 
-    return render(request,'inventory/newentry.html',{'temp_item':temp_item})
+    return render(request,'inventory/newentry.html', presets)
 
 def list(request):
     try:

@@ -9,20 +9,20 @@
 			var rowCount = table.rows.length;
 			var row = table.insertRow(rowCount);
 
-			var cell1 = row.insertCell(0);
-			var element1 = document.createElement("input");
-			element1.type = "checkbox";
-			element1.name="chkbox[]";
-			cell1.appendChild(element1);
 
+			var cell3 = row.insertCell(0);
+			var element2 = document.createElement("select");
+			element2.name = "item_type[]";
+			element2.innerHTML =
+                "<select id=\"delivered_by\" name=\"delivered_by\">\n" +
+                "                    {% for item in item_preset %}\n" +
+                "                        <option value='{{ item }}'>{{ item }}</option>\n" +
+                "                    {% endfor %}\n" +
+                "                </select>"
 
-			var cell3 = row.insertCell(1);
-			var element2 = document.createElement("input");
-			element2.type = "text";
-			element2.name = "fruit[]";
-			cell3.appendChild(element2);
+            cell3.appendChild(element2);
 
-			var cell4 = row.insertCell(2);
+			var cell4 = row.insertCell(1);
 			var element3 = document.createElement("input");
 			element3.type = "text";
 			element3.name = "qtty[]";
@@ -35,18 +35,8 @@
 			try {
 			var table = document.getElementById(tableID);
 			var rowCount = table.rows.length;
+				table.deleteRow(rowCount - 1)
 
-			for(var i=0; i<rowCount; i++) {
-				var row = table.rows[i];
-				var chkbox = row.cells[0].childNodes[0];
-				if(null != chkbox && true == chkbox.checked) {
-					table.deleteRow(i);
-					rowCount--;
-					i--;
-				}
-
-
-			}
 			}catch(e) {
 				alert(e);
 			}
@@ -57,33 +47,63 @@
   <head>
     <meta charset="utf-8">
     <title>agriventure</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /
   </head>
   <body>
     <p>Neue Lieferung</p>
 
         <form method="POST">
-            <label class="entry_type_switch">
-            Zugang
-            <input class="slider" type="checkbox" id="entry_type" name="entry_type" checked="{{ temp_item.entry_type }}">
-            </label>
+            <select id="transaction_type" name="transaction_type">
+            <option value=”plus”>Zugang</option>
+            <option value=”minus”>Abgang</option>
+            <option value=”flux”>Umlagerung</option>
+            </select>
         <table>
             <tr>
                 <td>Datum/Zeit</td>
-                <td><label><input type="datetime-local" id="date_time" name="date_time" value="{{ temp_item.date_time}}" ></label></td>
+                <td><label><input type="datetime-local" class="form-control" id="date_time" name="date_time"></label></td>
             </tr>
 
             <tr>
                 <td>Für</td>
-                <td><label><input type="text" id="delivered_by" name="delivered_by" value="{{ temp_item.deilvered_by }}"></label></td>
+                <td>
+                    <select id="delivered_by" name="delivered_by">
+                    {% for item in delivered_by_preset %}
+                        <option value="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select>
+                </td>
             </tr>
+
+            <tr>
+                <td>Bearbeitet Von</td>
+                <td>
+                    <select id="done_by" name="done_by">
+                    {% for item in done_by_preset %}
+                        <option value="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>KFZ</td>
+                <td><label><input type="text" class="form-control" id="vehicle" name="vehicle"></label></td>
+            </tr>
+
             <TABLE id="dataTable" width="350px" border="1">
-                <th>
-                    <td>Frucht</td>
-                    <td>Menge</td>
-                </th>
+                <th>Artikel</th>
+                <th>Menge</th>
                 <TR>
-                    <TD><INPUT type="checkbox" name="chk"/></TD>
-                    <TD> <INPUT type="text" name="fruit[]" /> </TD>
+                    <TD>
+                        <select  name="item_type[]">
+                        {% for item in item_preset %}
+                            <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                        </select>
+
+                    </TD>
                     <TD> <INPUT type="text" name="qtty[]" /> </TD>
                 </TR>
             </TABLE>
