@@ -18,15 +18,85 @@
                 "                    {% for item in item_preset %}\n" +
                 "                        <option value='{{ item }}'>{{ item }}</option>\n" +
                 "                    {% endfor %}\n" +
-                "                </select>"
+                "                </select>";
 
             cell3.appendChild(element2);
 
 			var cell4 = row.insertCell(1);
 			var element3 = document.createElement("input");
 			element3.type = "text";
-			element3.name = "qtty[]";
+			element3.name = "vehicle_id[]";
 			cell4.appendChild(element3);
+
+			var cell3 = row.insertCell(2);
+			var element2 = document.createElement("select");
+			element2.name = "item_type[]";
+			element2.innerHTML =
+                "<select  name=\"warehouse\">\n" +
+                "                    {% for item in warehouse_preset %}\n" +
+                "                        <option value='{{ item }}'>{{ item }}</option>\n" +
+                "                    {% endfor %}\n" +
+                "                </select>";
+
+            cell3.appendChild(element2);
+
+			var cell3 = row.insertCell(3);
+			var element2 = document.createElement("input");
+			var labname = 'lab' + rowCount;
+			element2.id = 'btn' + labname;
+			element2.type = "button";
+			element2.value = '-';
+			element2.setAttribute('onclick','showHideTable("'+labname+'")');
+
+			cell3.appendChild(element2);
+
+            var cell3 = row.insertCell(4);
+			var element2 = document.createElement("input");
+			var scalename = 'scale' + rowCount;
+			element2.id = 'btn' + scalename;
+			element2.type = "button";
+			element2.value = '-';
+			element2.setAttribute('onclick','showHideTable("'+scalename+'")');
+
+            cell3.appendChild(element2);
+
+            var cell3 = table.insertRow();
+			var element2 = document.createElement("table");
+			element2.border = "1";
+            element2.id = labname;
+            element2.style = "{display: none}";
+			element2.innerHTML =
+                "                        {% for item in laboratory_attributes %}\n" +
+                "                        <th>{{ item }}</th>\n" +
+                "                        {% endfor %}\n" +
+                "                        <tr>\n" +
+                "                        {% for item in laboratory_attributes %}\n" +
+                "                        <td><label><input type=\"text\" class=\"form-control\" id=\"{{ item }}[]\" name=\"{{ item }}[]\"></label></td>\n" +
+                "                        {% endfor %}\n" +
+                "                        </tr>\n";
+            cell3.appendChild(element2);
+
+            var cell3 = table.insertRow();
+			var element2 = document.createElement("table");
+			element2.border = "1";
+            element2.id = scalename;
+            element2.style = "{display: none}";
+			element2.innerHTML =
+                "                <th>Nr. Waage</th>\n" +
+                "                <th>Brutto Gewicht</th>\n" +
+                "                <th>KFZ</th>\n" +
+                "                <th>Leergewicht</th>\n" +
+                "                <tr>\n" +
+                "                    <td><label><input type=\"text\" class=\"form-control\" id=\"scale_id[]\" name=\"scale_id[]\"></label></td>\n" +
+                "                \n" +
+                "                    <td><label><input type=\"text\" class=\"form-control\" id=\"weight_brutto[]\" name=\"weight_brutto[]\"></label></td>\n" +
+                "                \n" +
+                "                    <td><label><input type=\"text\" class=\"form-control\" id=\"vehicle[]\" name=\"vehicle[]\"></label></td>\n" +
+                "                \n" +
+                "                    <td><label><input type=\"text\" class=\"form-control\" id=\"weight_empty[]\" name=\"weight_empty[]\"></label></td>\n" +
+                "                </tr>\n";
+            cell3.appendChild(element2);
+
 
 
 		}
@@ -36,11 +106,27 @@
 			var table = document.getElementById(tableID);
 			var rowCount = table.rows.length;
 				table.deleteRow(rowCount - 1)
+                table.deleteRow(rowCount - 2)
+                table.deleteRow(rowCount - 3)
 
 			}catch(e) {
 				alert(e);
 			}
 		}
+
+		function showHideTable(tableID) {
+                   if (document.getElementById(tableID).style.display == 'none') {
+                document.getElementById(tableID).style.display = '';
+                document.getElementById('btn'+tableID).value = '-';
+            } else {
+                document.getElementById(tableID).style.display = 'none';
+                document.getElementById('btn'+tableID).value = '+';
+            }
+        }
+
+        function rowID() {
+            return document.getElementById(dataTable).rows.length
+        }
 
 	</SCRIPT>
 
@@ -87,26 +173,14 @@
             </tr>
 
 
-            <tr>
-                <td>KFZ</td>
-                <td><label><input type="text" class="form-control" id="vehicle" name="vehicle"></label></td>
-            </tr>
-
             <TABLE id="dataTable" width="350px" border="1">
                 <th>Artikel</th>
-                <th>Menge</th>
-                <TR>
-                    <TD>
-                        <select  name="item_type[]">
-                        {% for item in item_preset %}
-                            <option value="{{ item }}">{{ item }}</option>
-                        {% endfor %}
-                        </select>
-
-                    </TD>
-                    <TD> <INPUT type="text" name="qtty[]" /> </TD>
-                </TR>
+                <th>KFZ</th>
+                <th>Lager</th>
+                <th>Labor</th>
+                <th>Waage</th>
             </TABLE>
+
             <tr>
                 <td><input type="button" value="Neue Komponente" onclick="addRow('dataTable')" /></td>
                 <td><input type="button" value="Lösche Komponente" onclick="deleteRow('dataTable')" /></td>

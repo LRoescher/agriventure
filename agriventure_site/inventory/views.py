@@ -12,7 +12,9 @@ from django_filters.views import FilterView
 from django.views.generic import CreateView
 from django_tables2.views import SingleTableMixin
 
-from .models import Transaction, TransactionComponent, Item, User, Customer, Warehouse
+from django.db.models import Model
+
+from .models import Transaction, TransactionComponent, Item, User, Customer, Warehouse, LaboratoryAnalysis
 
 import django_filters
 
@@ -67,11 +69,18 @@ def newentry(request):
     item_preset = Item.objects.all()
     warehouse_preset = Warehouse.objects.all()
 
+    # get attributes from laboratory analysis and filter out meta
+    laboratory_attributes = set(dir(LaboratoryAnalysis)).difference(set(dir(Model)))
+    laboratory_attributes = [e for e in laboratory_attributes if not "_" in e]
+    for e in ['DoesNotExist', 'id', 'objects', 'MultipleObjectsReturned', 'transactioncomponent', 'date', 'costs']:
+        laboratory_attributes.remove(e)
+
     presets = {
         'delivered_by_preset': delivered_by_preset,
         'done_by_preset':done_by_preset,
         'item_preset':item_preset,
-        'warehouse_preset':warehouse_preset
+        'warehouse_preset':warehouse_preset,
+        'laboratory_attributes':laboratory_attributes
     }
 
     print(request.POST)
