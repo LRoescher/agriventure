@@ -14,7 +14,9 @@ from django_tables2.views import SingleTableMixin
 
 from django.db.models import Model
 
-from .models import Transaction, TransactionComponent, Item, User, Customer, Warehouse, LaboratoryAnalysis
+from django.utils import dateparse
+
+from .models import Transaction, TransactionComponent, Item, User, Customer, Warehouse, LaboratoryAnalysis, ScaleQuantity
 
 import django_filters
 
@@ -64,6 +66,7 @@ def index(request):
 @csrf_exempt
 def newentry(request):
     #get locals for form
+    print(Customer.objects.all().filter(name="Britta Röscher"))
     delivered_by_preset = Customer.objects.all()
     done_by_preset = User.objects.all()
     item_preset = Item.objects.all()
@@ -84,7 +87,66 @@ def newentry(request):
     }
 
     print(request.POST)
+    if request.POST.get("transaction_type") == "plus":
+        transaction_content = request.POST
+        #calculate costs? Input??
+        costs = 100
 
+        #get customer by id
+        delivered_by = Customer.objects.get(pk=transaction_content.get("delivered_by").split["ID"][-1])
+
+        #get user that created transaction
+        done_by = User.objects.get(username=transaction_content.get("done_by"))
+
+        #create all components
+        components = []
+        for i in range(len(transaction_content.get("item_type[]"))):
+
+            #create laboratory Analysis
+            laboratory_analysis = LaboratoryAnalysis.objects.create(
+            feuchte=transaction_content.get("feuchte[]")[i],
+            fallzahl = transaction_content.get("fallzahl[]")[i],
+            ausputz = transaction_content.get("ausputz[]")[i],
+            mutterkorn = transaction_content.get("mutterkorn[]")[i],
+            kleinbruch = transaction_content.get("kleinbruch[]")[i],
+            hlgewicht = transaction_content.get("hlgewicht[]")[i],
+            fremdgetreide = transaction_content.get("fremdgetreide[]")[i],
+            auswuchs = transaction_content.get("auswuchs[]")[i],
+            date = dateparse.parse_date(transaction_content.date),
+            costs = costs,
+            done_by = done_by,
+            )
+            laboratory_analysis.save()
+
+            #create scale quantity
+            scale_quantity = ScaleQuantity.objects.create(
+            brutto_weight= float(transaction_content.get("weight_brutto[]")[i]),
+            scale_number = int(transaction_content.get("scale_id[]")[i]),
+            vehicle_id = transaction_content.get("vehicle[]")[i],
+            empty_weight = float(transaction_content.get("weight_empty[]")[i]),
+            done_by = done_by,
+            )
+            scale_quantity.save()
+
+            TransactionComponent.objects.create(
+            item=Item.objects.get(pk=transaction_content.get("item_type[]")[i].split["ID"][-1]),
+            laboratory_analysis = laboratory_analysis,
+            vehicle_id = Item.objects.get(pk=transaction_content.get("vehicle_id[]")[i].split["ID"][-1]),
+            warehouse = Item.objects.get(pk=transaction_content.get("warehouse[]")[i].split["ID"][-1]),
+            scale_quantity = scale_quantity
+            )
+        
+        transaction = Transaction.objects.create(
+        date = dateparse.parse_date(transaction_content.date),
+        time=dateparse.parse_time(transaction_content.time),
+        costs = costs,
+        delivered_by = delivered_by,
+        done_by = done_by,
+        components = components,
+        transaction_type = "plus"
+        )
+
+        transaction.save()
     if "new_component" in request.POST.keys():
         item = Item.objects.create(crop_name = "ddfwf")
     if "new_component" in request.POST.keys():

@@ -30,7 +30,7 @@
 
 			var cell3 = row.insertCell(2);
 			var element2 = document.createElement("select");
-			element2.name = "item_type[]";
+			element2.name = "warehouse[]";
 			element2.innerHTML =
                 "<select  name=\"warehouse\">\n" +
                 "                    {% for item in warehouse_preset %}\n" +
@@ -147,7 +147,8 @@
         <table>
             <tr>
                 <td>Datum/Zeit</td>
-                <td><label><input type="datetime-local" class="form-control" id="date_time" name="date_time"></label></td>
+                <td><label><input type="date" class="form-control" id="date" name="date"></label></td>
+                <td><label><input type="time" class="form-control" id="time" name="time"></label></td>
             </tr>
 
             <tr>
@@ -175,7 +176,7 @@
 
             <TABLE id="dataTable" width="350px" border="1">
                 <th>Artikel</th>
-                <th>KFZ</th>
+                <th>Zugmaschine</th>
                 <th>Lager</th>
                 <th>Labor</th>
                 <th>Waage</th>

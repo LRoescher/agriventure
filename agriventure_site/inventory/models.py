@@ -13,27 +13,28 @@ class Address(models.Model):
 
 class Customer(models.Model):
     name = models.CharField(max_length=200, unique=True)
+    first_name = models.CharField(max_length=200, unique=True)
     address = models.OneToOneField(Address, on_delete=models.SET_NULL, null=True)
-    telephone = models.IntegerField(unique=True)
+    telephone =models.CharField(max_length=200, unique=True)
     customer_type = models.CharField(max_length=200,
                                         choices=[("company", "Agrarbetrieb"), ("private", "Privat")],
                                         default=("company", "Agrarbetrieb"))
     def __str__(self):
-        return "{}, {}".format(self.name, self.address.city)
+        return "{}, {}; {} ID{}".format(self.name, self.first_name, self.address.city, self.pk)
 
 
 class Item(models.Model):
     crop_name = models.CharField(max_length=200) #Later by Crop class
 
     def __str__(self):
-        return "{}".format(self.crop_name.__str__())
+        return "{} ID{}".format(self.crop_name.__str__(), self.pk)
 
 class WarehouseSlot(models.Model):
     item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
     quantity = models.FloatField(null=True)
 
     def __str__(self):
-        return self.item.__str__()
+        return "{} ID{}".format(self.item.__str__(), self.pk)
 
 class Warehouse(models.Model):
     name = models.CharField(max_length=200)
@@ -41,7 +42,7 @@ class Warehouse(models.Model):
     slots = models.ManyToManyField(WarehouseSlot, null=True)
 
     def __str__(self):
-        return self.name.__str__()
+        return "{} ID{}".format(self.name.__str__(), self.pk)
 
 class LaboratoryAnalysis(models.Model):
     feuchte = models.FloatField(null=True)
@@ -57,17 +58,18 @@ class LaboratoryAnalysis(models.Model):
     costs = models.FloatField(null=True)
     done_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return "{} ID{}".format(self.date.__str__(), self.pk)
+
 class ScaleQuantity(models.Model):
     brutto_weight = models.FloatField(null=True)
     scale_number = models.IntegerField()
-    models.DateTimeField(null=True)
     vehicle_id = models.CharField(max_length=200)
     empty_weight = models.FloatField(null=True)
     done_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.vehicle_id.__str__()+";"+ self.brutto_weight.__str__()
-
+        return "{}; {} ID{}".format(self.vehicle_id, self.brutto_weight, self.pk)
 
 
 class TransactionComponent(models.Model):
@@ -78,11 +80,11 @@ class TransactionComponent(models.Model):
     scale_quantity = models.OneToOneField(ScaleQuantity,null = True,  on_delete=models.SET_NULL)
 
     def __str__(self):
-        return "Posten: {} Menge: {} {}kg".format(self.item.__str__(), *self.scale_quantity.__str__().split(";"))
+        return "Posten: {} Menge: {}kg ID{}".format(self.item.__str__(), *self.scale_quantity.__str__().split("ID").pop(-1), self.pk)
 
 class Transaction(models.Model):
-    tan = models.IntegerField(unique=True)
-    date = models.DateTimeField(null=True)
+    date = models.DateField(null=True)
+    time = models.TimeField(null=True)
     costs = models.FloatField(null=True)
     delivered_by = models.ForeignKey(Customer, on_delete=models.CASCADE)
     done_by = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -91,7 +93,7 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=200, choices=[("plus", "Zugang"), ("minus", "Abgang"), ("flux", "Umlagerung")], default=("plus", "Zugang"))
 
     def __str__(self):
-        return "{} | Name: {}".format(self.date.__str__(), self.delivered_by)
+        return "{} | Name: {} ID{}".format(self.date.__str__(), self.delivered_by, self.pk)
 
 class InventorySystem(models.Model):
     warehouses = models.ForeignKey(Warehouse, on_delete=models.SET_NULL, null=True)
