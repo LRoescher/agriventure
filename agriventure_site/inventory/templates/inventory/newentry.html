@@ -22,13 +22,8 @@
 
             cell3.appendChild(element2);
 
-			var cell4 = row.insertCell(1);
-			var element3 = document.createElement("input");
-			element3.type = "text";
-			element3.name = "vehicle_id[]";
-			cell4.appendChild(element3);
 
-			var cell3 = row.insertCell(2);
+			var cell3 = row.insertCell(1);
 			var element2 = document.createElement("select");
 			element2.name = "warehouse[]";
 			element2.innerHTML =
@@ -40,7 +35,7 @@
 
             cell3.appendChild(element2);
 
-			var cell3 = row.insertCell(3);
+			var cell3 = row.insertCell(2);
 			var element2 = document.createElement("input");
 			var labname = 'lab' + rowCount;
 			element2.id = 'btn' + labname;
@@ -50,7 +45,7 @@
 
 			cell3.appendChild(element2);
 
-            var cell3 = row.insertCell(4);
+            var cell3 = row.insertCell(3);
 			var element2 = document.createElement("input");
 			var scalename = 'scale' + rowCount;
 			element2.id = 'btn' + scalename;
@@ -64,7 +59,7 @@
 			var element2 = document.createElement("table");
 			element2.border = "1";
             element2.id = labname;
-            element2.style = "{display: none}";
+            element2.style = "width: 100%; border: 1px solid black; {display: none}";
 			element2.innerHTML =
                 "                        {% for item in laboratory_attributes %}\n" +
                 "                        <th>{{ item }}</th>\n" +
@@ -80,7 +75,7 @@
 			var element2 = document.createElement("table");
 			element2.border = "1";
             element2.id = scalename;
-            element2.style = "{display: none}";
+            element2.style = "width: 100%; border: 1px solid black; {display: none}";
 			element2.innerHTML =
                 "                <th>Nr. Waage</th>\n" +
                 "                <th>Brutto Gewicht</th>\n" +
@@ -176,6 +171,11 @@
             </tr>
 
             <tr>
+                <td>Zugmaschine</td>
+                <td><label><input type="text" class="form-control" id="main_vehicle_id" name="date"></label></td>
+            </tr>
+
+            <tr>
                 <td>Für</td>
                 <td>
                     <select id="delivered_by" name="delivered_by">
@@ -198,9 +198,8 @@
             </tr>
 
 
-            <TABLE id="dataTable" width="350px" border="1">
+            <TABLE id="dataTable" style="width: 75%; border: 2px solid black;">
                 <th>Artikel</th>
-                <th>Zugmaschine</th>
                 <th>Lager</th>
                 <th>Labor</th>
                 <th>Waage</th>

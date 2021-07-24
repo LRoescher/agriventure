@@ -80,7 +80,7 @@ class TransactionComponent(models.Model):
     scale_quantity = models.OneToOneField(ScaleQuantity,null = True,  on_delete=models.SET_NULL)
 
     def __str__(self):
-        return "Posten: {} Menge: {}kg ID{}".format(self.item.__str__(), *self.scale_quantity.__str__().split("ID").pop(-1), self.pk)
+        return "Posten: {} Menge: {}kg ID{}".format(self.item.crop_name, str(self.scale_quantity.brutto_weight - self.scale_quantity.brutto_weight), self.pk)
 
 class Transaction(models.Model):
     date = models.DateField(null=True)
@@ -89,11 +89,11 @@ class Transaction(models.Model):
     delivered_by = models.ForeignKey(Customer, on_delete=models.CASCADE)
     done_by = models.ForeignKey(User, on_delete=models.CASCADE)
     components = models.ManyToManyField(TransactionComponent)
-
+    main_vehicle = models.CharField(max_length=200, null=True)
     transaction_type = models.CharField(max_length=200, choices=[("plus", "Zugang"), ("minus", "Abgang"), ("flux", "Umlagerung")], default=("plus", "Zugang"))
 
     def __str__(self):
-        return "{} | Name: {} ID{}".format(self.date.__str__(), self.delivered_by, self.pk)
+        return "{} | Name: {} ID{}".format(self.date.__str__(), self.delivered_by.last_name, self.pk)
 
 class InventorySystem(models.Model):
     warehouses = models.ForeignKey(Warehouse, on_delete=models.SET_NULL, null=True)
