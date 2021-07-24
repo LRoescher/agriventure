@@ -19,3 +19,11 @@ class TransactionTable(tables.Table):
             'Lieferschein'
         )
     Lieferschein = TemplateColumn(template_name='inventory/tables/list_generate_column_template.html')
+    pk = tables.Column(verbose_name= 'NR.' )
+    date = tables.Column(verbose_name= 'Datum' )
+    time = tables.Column(verbose_name='Uhrzeit')
+    transaction_type = tables.Column(verbose_name='Art')
+    delivered_by = tables.Column(verbose_name='Für')
+    done_by = tables.Column(verbose_name='Von')
+    components = tables.ManyToManyColumn(verbose_name="Komponenten")
+    costs = tables.Column(verbose_name='Kosten')
