@@ -8,6 +8,7 @@ class TransactionTable(tables.Table):
         model = Transaction
         template_name = "django_tables2/bootstrap.html"
         fields = (
+            'pk',
             'date',
             'time',
             'transaction_type',

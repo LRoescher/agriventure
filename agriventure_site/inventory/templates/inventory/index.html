@@ -2,22 +2,42 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>agriventure</title>
+        <title>agriventure</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+      <style>
+            ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #333;
+        }
+
+        li {
+          float: left;
+        }
+
+        li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+        }
+
+        /* Change the link color to #111 (black) on hover */
+        li a:hover {
+          background-color: #111;
+        }
+        </style>
   </head>
   <body>
-    <p>Warensystem für Landwirte</p>
-    <div>
-        <div>
-        <form method="POST">
-            <input type="submit" id="list_transactions" name="list_transactions" value="Liste Lieferungen"><br><br>
-        </form>
-        </div>
-
-        <div>
-        <form method="POST">
-            <input type="submit" id="new_transactions" name="new_transactions" value="Neue Lieferung"><br><br>
-        </form>
-        </div>
-    </div>
+     <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/list/?sort=-pk">Liste Transaktionen</a></li>
+      <li><a href="/newentry/">Neue Transaktion</a></li>
+      <li><a href="/admin/">Administrator</a></li>
+    </ul>
+    <h1>Willkommen!</h1>
   </body>
 </html>
