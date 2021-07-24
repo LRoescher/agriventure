@@ -37,7 +37,6 @@ class TransactionCreateView(CreateView):
     model = Transaction
 
     fields = (
-    'tan',
     'date' ,
     'costs' ,
     'delivered_by',
@@ -105,6 +104,8 @@ def newentry(request):
 
         #create all components
         components = []
+        quantities = []
+        lab_analysis = []
         for i in range(len(transaction_content.get("item_type[]"))):
 
             #create laboratory Analysis
@@ -123,6 +124,7 @@ def newentry(request):
             )
 
             laboratory_analysis.save()
+            lab_analysis.append(laboratory_analysis)
 
             #create scale quantity
             scale_quantity = ScaleQuantity(
@@ -133,6 +135,7 @@ def newentry(request):
             done_by = done_by,
             )
             scale_quantity.save()
+            quantities.append(scale_quantity)
 
             warehouse = Warehouse.objects.get(pk=transaction_content.get("warehouse[]")[i].split("ID")[-1])
             item = Item.objects.get(pk=transaction_content.get("item_type[]")[i].split("ID")[-1])
@@ -174,6 +177,7 @@ def newentry(request):
         transaction.save()
         transaction.components.set(components)
         transaction.save()
+        return redirect('/list/')
 
 
 

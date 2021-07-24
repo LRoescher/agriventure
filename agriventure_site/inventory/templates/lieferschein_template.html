@@ -1,0 +1,73 @@
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>agriventure</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+            <style>
+                body {
+                    height: 842px;
+                    width: 595px;
+                    /* to centre page on screen*/
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+
+                address {
+                      display: block;
+                      font-style: italic;
+                    }
+    </style>
+    </head>
+
+    <body>
+    <h2 style="text-align: center;" id="title">Lieferschein
+        <span >Nr. </span>
+        <span id="transaction_id">-1</span><br>
+        <span style="font-size: medium; " id="generation_date">01.01.2020 13:30</span>
+    </h2>
+
+    <address id="delivered_by_id" style="text-align: left; ">
+        Agrarbetrieb<br>
+        Britta Röscher <br>
+        Hauptstraße 1<br>
+        39638 Elsebeck<br>
+    </address>
+
+    <address style="text-align: right; ">
+        Norbert Tendler <br>
+        Teststraße 1<br>
+        123345 Jeseritz<br>
+    </address>
+
+    <h4><span id="transaction_type">Eingang vom:</span><span id="transaction_date">01.01.2021</span><br></h4>
+
+    <table id="transaction_header_table">
+        <tr><td>Lieferer:</td><td id="delivered_by">Britta Röscher</td></tr>
+        <tr><td>Empfänger:</td><td id="done_by">Norbert Tendler</td></tr>
+        <tr><td>Zugmaschine:</td><td id="vehicle_id">BKBR400</td></tr>
+    </table>
+    <h4>Komponenten</h4>
+    <table id="transaction_table" style="width: 100%; border: 2px solid black;">
+        <tr>
+            <th>Artikel</th>
+            <th>Lager</th>
+            <th>Laborbericht</th>
+            <th>Wiegung</th>
+        </tr>
+    </table>
+    <br>
+    <span>Abgegeben Gesamt: <span id="total_delivered"></span>></span>
+
+    <br>
+    <br>
+    <br>
+    <span style="width: 100%">
+        <input type="text" style=" border: 0; border-bottom: 1px solid #000; width: 30%" value="Lieferer"/>
+        <input type="text" style=" border: 0; width: 33%" value=""/>
+        <input type="text" style=" border: 0; border-bottom: 1px solid #000; width: 30%" value="Empfänger"/>
+    </span>
+
+    </body>
+</html>
