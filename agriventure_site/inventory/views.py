@@ -4,7 +4,7 @@ from django.template import loader
 from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
-from .tables import TransactionTable
+from .tables import TransactionTable, WarehouseTable
 from django_filters.views import FilterView
 from django.views.generic import CreateView
 from django_tables2.views import SingleTableMixin
@@ -28,6 +28,11 @@ class TransactioFilter(django_filters.FilterSet):
     class Meta:
         model = Transaction
         fields = ['date']
+
+class WarehouseListView(SingleTableMixin, FilterView):
+    model = Warehouse
+    table_class = WarehouseTable
+    template_name = 'inventory/stock.html'
 
 class InventoryListView(SingleTableMixin, FilterView):
 
@@ -104,14 +109,14 @@ def newentry(request):
 
             #create laboratory Analysis
             laboratory_analysis = LaboratoryAnalysis(
-            feuchte=float(transaction_content.get("feuchte[]")[i]),
-            fallzahl = float(transaction_content.get("fallzahl[]")[i]),
-            ausputz = float(transaction_content.get("ausputz[]")[i]),
-            mutterkorn = float(transaction_content.get("mutterkorn[]")[i]),
-            kleinbruch = float(transaction_content.get("kleinbruch[]")[i]),
-            hlgewicht = float(transaction_content.get("hlgewicht[]")[i]),
-            fremdgetreide = float(transaction_content.get("fremdgetreide[]")[i]),
-            auswuchs = float(transaction_content.get("auswuchs[]")[i]),
+            feuchte=float(transaction_content.get("feuchte[]")[i].replace(',','.')),
+            fallzahl = float(transaction_content.get("fallzahl[]")[i].replace(',','.')),
+            ausputz = float(transaction_content.get("ausputz[]")[i].replace(',','.')),
+            mutterkorn = float(transaction_content.get("mutterkorn[]")[i].replace(',','.')),
+            kleinbruch = float(transaction_content.get("kleinbruch[]")[i].replace(',','.')),
+            hlgewicht = float(transaction_content.get("hlgewicht[]")[i].replace(',','.')),
+            fremdgetreide = float(transaction_content.get("fremdgetreide[]")[i].replace(',','.')),
+            auswuchs = float(transaction_content.get("auswuchs[]")[i].replace(',','.')),
             date = dateparse.parse_date(transaction_content.get("date")[0]),
             costs = costs,
             done_by = done_by,
@@ -122,10 +127,10 @@ def newentry(request):
 
             #create scale quantity
             scale_quantity = ScaleQuantity(
-            brutto_weight= float(transaction_content.get("weight_brutto[]")[i]),
+            brutto_weight= float(transaction_content.get("weight_brutto[]")[i].replace(',','.')),
             scale_number = int(transaction_content.get("scale_id[]")[i]),
             vehicle_id = transaction_content.get("vehicle[]")[i],
-            empty_weight = float(transaction_content.get("weight_empty[]")[i]),
+            empty_weight = float(transaction_content.get("weight_empty[]")[i].replace(',','.')),
             done_by = done_by,
             )
             scale_quantity.save()
@@ -146,16 +151,16 @@ def newentry(request):
             #update warehouse
 
 
-            quantity = float(transaction_content.get("weight_brutto[]")[i]) - float(transaction_content.get("weight_empty[]")[i])
+            quantity = float(transaction_content.get("weight_brutto[]")[i].replace(',','.')) - float(transaction_content.get("weight_empty[]")[i].replace(',','.'))
             existing = False
             for slot in warehouse.slots.all():
                 if item.pk == slot.item.pk:
                     if "plus" in tan_type:
-                        slot.quantity += float(transaction_content.get("weight_brutto[]")[i]) - float(
-                            transaction_content.get("weight_empty[]")[i])
+                        slot.quantity += float(transaction_content.get("weight_brutto[]")[i].replace(',','.')) - float(
+                            transaction_content.get("weight_empty[]")[i].replace(',','.'))
                     if "minus" in tan_type:
-                        slot.quantity -= float(transaction_content.get("weight_brutto[]")[i]) - float(
-                            transaction_content.get("weight_empty[]")[i])
+                        slot.quantity -= float(transaction_content.get("weight_brutto[]")[i].replace(',','.')) - float(
+                            transaction_content.get("weight_empty[]")[i].replace(',','.'))
                     slot.save()
                     existing = True
                     break

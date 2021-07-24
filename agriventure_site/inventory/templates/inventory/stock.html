@@ -1,10 +1,12 @@
-<!DOCTYPE html>
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+<!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
+    <head>
+        <meta charset="utf-8">
         <title>agriventure</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-      <style>
+        <style>
             ul {
           list-style-type: none;
           margin: 0;
@@ -30,15 +32,19 @@
           background-color: #111;
         }
         </style>
-  </head>
-  <body>
-     <ul>
+    </head>
+    <body>
+    <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/list/?sort=-pk">Liste Transaktionen</a></li>
       <li><a href="/newentry/">Neue Transaktion</a></li>
-         <li><a href="/stock/">Lager</a></li>
+        <li><a href="/stock/">Lager</a></li>
       <li><a href="/admin/">Administrator</a></li>
     </ul>
-    <h1>Willkommen!</h1>
-  </body>
+{% render_table table 'django_tables2/bootstrap.html' %}
+</body>
 </html>
+
+
+
+

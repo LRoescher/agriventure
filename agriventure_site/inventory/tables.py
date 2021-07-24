@@ -1,6 +1,20 @@
 import django_tables2 as tables
 from django_tables2 import TemplateColumn
-from .models import Transaction
+from .models import Transaction, Warehouse
+
+class WarehouseTable(tables.Table):
+    class Meta:
+        model = Warehouse
+        template_name = "django_tables2/bootstrap.html"
+        fields = {
+            'name',
+            'location',
+            'slots'
+        }
+    name = tables.Column(verbose_name="Bezeichnung")
+    location =tables.Column(verbose_name="Ort")
+    slots = tables.ManyToManyColumn(verbose_name="Bestand")
+
 
 
 class TransactionTable(tables.Table):

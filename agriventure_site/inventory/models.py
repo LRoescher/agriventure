@@ -80,7 +80,7 @@ class TransactionComponent(models.Model):
     scale_quantity = models.OneToOneField(ScaleQuantity,null = True,  on_delete=models.SET_NULL)
 
     def __str__(self):
-        return "Posten: {} Menge: {}kg ID{}".format(self.item.crop_name, str(self.scale_quantity.brutto_weight - self.scale_quantity.brutto_weight), self.pk)
+        return "Posten: {} Menge: {}kg ID{}".format(self.item.crop_name, str(self.scale_quantity.brutto_weight - self.scale_quantity.empty_weight), self.pk)
 
 class Transaction(models.Model):
     date = models.DateField(null=True)
