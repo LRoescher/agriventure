@@ -16,7 +16,7 @@ from django.db.models import Model
 
 from django.utils import dateparse
 
-from .models import Transaction, TransactionComponent, Item, User, Customer, Warehouse, LaboratoryAnalysis, ScaleQuantity
+from .models import Transaction, TransactionComponent, Item, User, Customer, Warehouse, LaboratoryAnalysis, ScaleQuantity, WarehouseSlot
 
 import django_filters
 
@@ -86,40 +86,46 @@ def newentry(request):
         'laboratory_attributes':laboratory_attributes
     }
 
-    print(request.POST)
-    if request.POST.get("transaction_type") == "plus":
-        transaction_content = request.POST
+    try:
+        print(request.POST.get("transaction_type"))
+    except:
+        pass
+    if "transaction_type" in request.POST.keys() and "plus" in request.POST.get("transaction_type"):
+        print("Creating New Transaction")
+        transaction_content = {k:request.POST.getlist(k) for k in request.POST.keys()}
+        print(transaction_content)
         #calculate costs? Input??
         costs = 100
 
         #get customer by id
-        delivered_by = Customer.objects.get(pk=transaction_content.get("delivered_by").split["ID"][-1])
+        delivered_by = Customer.objects.get(pk=transaction_content.get("delivered_by")[0].split("ID")[-1])
 
         #get user that created transaction
-        done_by = User.objects.get(username=transaction_content.get("done_by"))
+        done_by = User.objects.get(username=transaction_content.get("done_by")[0])
 
         #create all components
         components = []
         for i in range(len(transaction_content.get("item_type[]"))):
 
             #create laboratory Analysis
-            laboratory_analysis = LaboratoryAnalysis.objects.create(
-            feuchte=transaction_content.get("feuchte[]")[i],
-            fallzahl = transaction_content.get("fallzahl[]")[i],
-            ausputz = transaction_content.get("ausputz[]")[i],
-            mutterkorn = transaction_content.get("mutterkorn[]")[i],
-            kleinbruch = transaction_content.get("kleinbruch[]")[i],
-            hlgewicht = transaction_content.get("hlgewicht[]")[i],
-            fremdgetreide = transaction_content.get("fremdgetreide[]")[i],
-            auswuchs = transaction_content.get("auswuchs[]")[i],
-            date = dateparse.parse_date(transaction_content.date),
+            laboratory_analysis = LaboratoryAnalysis(
+            feuchte=float(transaction_content.get("feuchte[]")[i]),
+            fallzahl = float(transaction_content.get("fallzahl[]")[i]),
+            ausputz = float(transaction_content.get("ausputz[]")[i]),
+            mutterkorn = float(transaction_content.get("mutterkorn[]")[i]),
+            kleinbruch = float(transaction_content.get("kleinbruch[]")[i]),
+            hlgewicht = float(transaction_content.get("hlgewicht[]")[i]),
+            fremdgetreide = float(transaction_content.get("fremdgetreide[]")[i]),
+            auswuchs = float(transaction_content.get("auswuchs[]")[i]),
+            date = dateparse.parse_date(transaction_content.get("date")[0]),
             costs = costs,
             done_by = done_by,
             )
+
             laboratory_analysis.save()
 
             #create scale quantity
-            scale_quantity = ScaleQuantity.objects.create(
+            scale_quantity = ScaleQuantity(
             brutto_weight= float(transaction_content.get("weight_brutto[]")[i]),
             scale_number = int(transaction_content.get("scale_id[]")[i]),
             vehicle_id = transaction_content.get("vehicle[]")[i],
@@ -128,33 +134,48 @@ def newentry(request):
             )
             scale_quantity.save()
 
-            TransactionComponent.objects.create(
-            item=Item.objects.get(pk=transaction_content.get("item_type[]")[i].split["ID"][-1]),
+            warehouse = Warehouse.objects.get(pk=transaction_content.get("warehouse[]")[i].split("ID")[-1])
+            item = Item.objects.get(pk=transaction_content.get("item_type[]")[i].split("ID")[-1])
+            c = TransactionComponent(
+            item= item,
             laboratory_analysis = laboratory_analysis,
-            vehicle_id = Item.objects.get(pk=transaction_content.get("vehicle_id[]")[i].split["ID"][-1]),
-            warehouse = Item.objects.get(pk=transaction_content.get("warehouse[]")[i].split["ID"][-1]),
+            vehicle_id = transaction_content.get("vehicle_id[]")[i],
+            warehouse = warehouse,
             scale_quantity = scale_quantity
             )
+            c.save()
+            components.append(c)
+            print(components)
+            #update warehouse
+
+            quantity = float(transaction_content.get("weight_brutto[]")[i]) - float(transaction_content.get("weight_empty[]")[i])
+            existing = False
+            for slot in warehouse.slots.all():
+                if item.pk == slot.item.pk:
+                    slot.quantity += float(transaction_content.get("weight_brutto[]")[i]) - float(transaction_content.get("weight_empty[]")[i])
+                    slot.save()
+                    existing = True
+                    break
+            if not existing:
+                newslot = WarehouseSlot(item=item, quantity=quantity)
+                newslot.save()
+                warehouse.slots.add(newslot)
+                warehouse.save()
+
         
-        transaction = Transaction.objects.create(
-        date = dateparse.parse_date(transaction_content.date),
-        time=dateparse.parse_time(transaction_content.time),
+        transaction = Transaction(
+        date = dateparse.parse_date(transaction_content.get("date")[0]),
+        time=dateparse.parse_time(transaction_content.get("time")[0]),
         costs = costs,
         delivered_by = delivered_by,
         done_by = done_by,
-        components = components,
         transaction_type = "plus"
         )
-
         transaction.save()
-    if "new_component" in request.POST.keys():
-        item = Item.objects.create(crop_name = "ddfwf")
-    if "new_component" in request.POST.keys():
-        print(request.POST)
-        temp_item = {'date_time': request.POST.get('datetime'),
-                     'delivered_by':request.POST.get('delivered_by'),
-                     'entry_type': 'true' if request.POST.get('entry_type') == 'on' else 'false'
-                     }
+        transaction.components.set(components)
+        transaction.save()
+
+
 
     return render(request,'inventory/newentry.html', presets)
 

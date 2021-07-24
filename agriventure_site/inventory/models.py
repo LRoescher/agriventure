@@ -34,12 +34,12 @@ class WarehouseSlot(models.Model):
     quantity = models.FloatField(null=True)
 
     def __str__(self):
-        return "{} ID{}".format(self.item.__str__(), self.pk)
+        return "{} {} ID{}".format(self.item, self.quantity, self.pk)
 
 class Warehouse(models.Model):
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=200)
-    slots = models.ManyToManyField(WarehouseSlot, null=True)
+    slots = models.ManyToManyField(WarehouseSlot)
 
     def __str__(self):
         return "{} ID{}".format(self.name.__str__(), self.pk)
@@ -76,7 +76,7 @@ class TransactionComponent(models.Model):
     item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
     laboratory_analysis = models.OneToOneField(LaboratoryAnalysis, null=True, on_delete=models.SET_NULL)
     vehicle_id = models.CharField(max_length=200)
-    warehouse = models.ManyToManyField(Warehouse)
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.SET_NULL, null=True)
     scale_quantity = models.OneToOneField(ScaleQuantity,null = True,  on_delete=models.SET_NULL)
 
     def __str__(self):
