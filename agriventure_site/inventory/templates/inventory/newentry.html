@@ -126,9 +126,17 @@
         function checkAndSubmit() {
 		    var inputs, index;
             var valid = true;
+            var isnumber = true;
             inputs = document.getElementsByTagName('input');
             for (index = 0; index < inputs.length; ++index) {
-                if (inputs[index].value.trim() == '') {
+                 if (inputs[index].parentElement.parentElement.parentElement.parentElement.parentElement.id.indexOf("lab")==0){
+                        if (isNaN(parseFloat(inputs[index].value))){
+                            valid = false;
+                            isnumber = false;
+                            inputs[index].style = "background-color:Tomato;";
+                        }
+                    }
+                if (inputs[index].value.trim() == '' || !isnumber) {
 
                     inputs[index].style = "background-color:Tomato;";
                     valid = false;
@@ -142,10 +150,6 @@
             }else {
                     document.getElementById('new_component_btn').style = "";
                 }
-            if (inputs[index].parentElement.parentElement.parentElement.id.includes("lab") && (!isNaN(parseFloat(inputs[index].value)))){
-                valid = false;
-                document.getElementById('new_component_btn').style = "background-color:Tomato;";
-            }
             if (valid) {
                 document.forms["new_transaction_form"].submit();
             }
