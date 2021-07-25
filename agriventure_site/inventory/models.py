@@ -93,7 +93,7 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=200, choices=[("plus", "Zugang"), ("minus", "Abgang"), ("flux", "Umlagerung")], default=("plus", "Zugang"))
 
     def __str__(self):
-        return "{} | Name: {} ID{}".format(self.date.__str__(), self.delivered_by.last_name, self.pk)
+        return "{} | Name: {} ID{}".format(self.date.__str__(), self.delivered_by.name, self.pk)
 
 class InventorySystem(models.Model):
     warehouses = models.ForeignKey(Warehouse, on_delete=models.SET_NULL, null=True)

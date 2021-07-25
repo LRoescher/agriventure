@@ -11,9 +11,9 @@ class WarehouseTable(tables.Table):
             'location',
             'slots'
         }
-    name = tables.Column(verbose_name="Bezeichnung")
-    location =tables.Column(verbose_name="Ort")
     slots = tables.ManyToManyColumn(verbose_name="Bestand")
+    name = tables.Column(verbose_name="Bezeichnung")
+    location = tables.Column(verbose_name="Ort")
 
 
 

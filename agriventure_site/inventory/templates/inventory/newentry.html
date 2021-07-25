@@ -66,7 +66,7 @@
                 "                        {% endfor %}\n" +
                 "                        <tr>\n" +
                 "                        {% for item in laboratory_attributes %}\n" +
-                "                        <td><label><input type=\"text\" class=\"form-control\" id=\"{{ item }}[]\" name=\"{{ item }}[]\"></label></td>\n" +
+                "                        <td><label><input type=\"number\" class=\"form-control\" id=\"{{ item }}[]\" name=\"{{ item }}[]\"></label></td>\n" +
                 "                        {% endfor %}\n" +
                 "                        </tr>\n";
             cell3.appendChild(element2);
@@ -82,13 +82,13 @@
                 "                <th>KFZ</th>\n" +
                 "                <th>Leergewicht</th>\n" +
                 "                <tr>\n" +
-                "                    <td><label><input type=\"text\" class=\"form-control\" id=\"scale_id[]\" name=\"scale_id[]\"></label></td>\n" +
+                "                    <td><label><input type=\"number\" class=\"form-control\" id=\"scale_id[]\" name=\"scale_id[]\"></label></td>\n" +
                 "                \n" +
-                "                    <td><label><input type=\"text\" class=\"form-control\" id=\"weight_brutto[]\" name=\"weight_brutto[]\"></label></td>\n" +
+                "                    <td><label><input type=\"number\" class=\"form-control\" id=\"weight_brutto[]\" name=\"weight_brutto[]\"></label></td>\n" +
                 "                \n" +
                 "                    <td><label><input type=\"text\" class=\"form-control\" id=\"vehicle[]\" name=\"vehicle[]\"></label></td>\n" +
                 "                \n" +
-                "                    <td><label><input type=\"text\" class=\"form-control\" id=\"weight_empty[]\" name=\"weight_empty[]\"></label></td>\n" +
+                "                    <td><label><input type=\"number\" class=\"form-control\" id=\"weight_empty[]\" name=\"weight_empty[]\"></label></td>\n" +
                 "                </tr>\n";
             cell3.appendChild(element2);
 
@@ -129,15 +129,7 @@
             var isnumber = true;
             inputs = document.getElementsByTagName('input');
             for (index = 0; index < inputs.length; ++index) {
-                 if (inputs[index].parentElement.parentElement.parentElement.parentElement.parentElement.id.indexOf("lab")==0){
-                        if (isNaN(parseFloat(inputs[index].value))){
-                            valid = false;
-                            isnumber = false;
-                            inputs[index].style = "background-color:Tomato;";
-                        }
-                    }
-                if (inputs[index].value.trim() == '' || !isnumber) {
-
+                 if (inputs[index].value.trim() == '' || !isnumber) {
                     inputs[index].style = "background-color:Tomato;";
                     valid = false;
                 }else {
@@ -213,7 +205,7 @@
 
             <tr>
                 <td>Zugmaschine</td>
-                <td><label><input type="text" class="form-control" id="main_vehicle_id" name="date"></label></td>
+                <td><label><input type="text" class="form-control" id="main_vehicle_id" name="main_vehicle_id"></label></td>
             </tr>
 
             <tr>

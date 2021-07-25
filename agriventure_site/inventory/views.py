@@ -178,7 +178,7 @@ def newentry(request):
         delivered_by = delivered_by,
         done_by = done_by,
         transaction_type = tan_type,
-        main_vehicle = transaction_content.get("main_vehicle_id")
+        main_vehicle = transaction_content.get("main_vehicle_id")[0]
         )
         transaction.save()
         transaction.components.set(components)
