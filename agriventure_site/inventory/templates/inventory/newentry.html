@@ -59,7 +59,7 @@
 			var element2 = document.createElement("table");
 			element2.border = "1";
             element2.id = labname;
-            element2.style = "width: 100%; border: 1px solid black; {display: none}";
+            element2.style = "width: 100%; border: 1px solid black; {display: none}"
 			element2.innerHTML =
                 "                        {% for item in laboratory_attributes %}\n" +
                 "                        <th>{{ item }}</th>\n" +
@@ -142,6 +142,10 @@
             }else {
                     document.getElementById('new_component_btn').style = "";
                 }
+            if (inputs[index].parentElement.parentElement.parentElement.id.includes("lab") && (!isNaN(parseFloat(inputs[index].value)))){
+                valid = false;
+                document.getElementById('new_component_btn').style = "background-color:Tomato;";
+            }
             if (valid) {
                 document.forms["new_transaction_form"].submit();
             }
