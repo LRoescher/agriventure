@@ -278,8 +278,8 @@ def generate_delivery_note(request):
         row = '<tr style="border: 1px solid black;">' + \
               '        <td>{}</td>' + \
               '        <td>{}</td>' + \
-              '     <td style="border: 1px dashed black;">' + \
-              '         <table style="width: 100%">' + \
+              '     <td>' + \
+              '         <table style="width: 90%">' + \
               '             <tr>' + \
               '                 <td>Feuchte </td>' + \
               '                 <td>{}</td>' + \
@@ -307,7 +307,7 @@ def generate_delivery_note(request):
               '         </table>' + \
               '     </td>' + \
               '     <td>' + \
-              '         <table style="width: 100%">' + \
+              '         <table style="width: 90%">' + \
               '             <tr>' + \
               '                 <td>Fahrzeug</td>' + \
               '                 <td>{}</td>' + \

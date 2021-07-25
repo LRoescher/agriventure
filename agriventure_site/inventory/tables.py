@@ -6,11 +6,11 @@ class WarehouseTable(tables.Table):
     class Meta:
         model = Warehouse
         template_name = "django_tables2/bootstrap.html"
-        fields = {
+        fields = (
             'name',
             'location',
             'slots'
-        }
+        )
     slots = tables.ManyToManyColumn(verbose_name="Bestand")
     name = tables.Column(verbose_name="Bezeichnung")
     location = tables.Column(verbose_name="Ort")
@@ -30,10 +30,9 @@ class TransactionTable(tables.Table):
             'done_by',
             'components',
             'costs',
-            'Lieferschein'
         )
-    Lieferschein = TemplateColumn(template_name='inventory/tables/list_generate_column_template.html')
-    pk = tables.Column(verbose_name= 'NR.' )
+
+    pk = TemplateColumn(verbose_name='Lieferschein NR.', template_name='inventory/tables/list_generate_column_template.html')
     date = tables.Column(verbose_name= 'Datum' )
     time = tables.Column(verbose_name='Uhrzeit')
     transaction_type = tables.Column(verbose_name='Art')

@@ -100,9 +100,11 @@
 			try {
 			var table = document.getElementById(tableID);
 			var rowCount = table.rows.length;
-				table.deleteRow(rowCount - 1)
-                table.deleteRow(rowCount - 2)
-                table.deleteRow(rowCount - 3)
+			if (rowCount > 2) {
+                table.deleteRow(rowCount - 1);
+                table.deleteRow(rowCount - 2);
+                table.deleteRow(rowCount - 3);
+            }
 
 			}catch(e) {
 				alert(e);
